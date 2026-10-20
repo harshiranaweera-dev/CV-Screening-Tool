@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CV Screening Tool</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<style>
+:root{--bg:#f5f6fa;--card:#fff;--tx:#1b2030;--mu:#6b7285;--bd:#e2e5ee;--ac:#3b5bdb;--ok:#2f9e44;--okb:#e6f6ea;--wn:#e67700;--wnb:#fff4e0;--no:#e03131;--nob:#fdeaea;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12141c;--card:#1b1f2b;--tx:#eceef6;--mu:#9aa1b5;--bd:#2c3243;--ac:#7c93ff;--ok:#51cf66;--okb:#17301f;--wn:#ffa94d;--wnb:#3a2a12;--no:#ff8787;--nob:#3a1b1b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12141c;--card:#1b1f2b;--tx:#eceef6;--mu:#9aa1b5;--bd:#2c3243;--ac:#7c93ff;--ok:#51cf66;--okb:#17301f;--wn:#ffa94d;--wnb:#3a2a12;--no:#ff8787;--nob:#3a1b1b;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:24px;margin:0 0 4px}.sub{color:var(--mu);margin:0 0 20px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px}
+.card h2{font-size:16px;margin:0 0 12px}
+label{display:block;font-size:13px;font-weight:600;margin:12px 0 4px}
+label small{font-weight:400;color:var(--mu)}
+input,textarea,select{width:100%;padding:9px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+textarea{min-height:110px;resize:vertical}
+.row{display:flex;gap:12px}.row>*{flex:1}
+button{font:inherit;border:0;border-radius:8px;padding:10px 16px;cursor:pointer;background:var(--ac);color:#fff;font-weight:600}
+button.sec{background:transparent;color:var(--ac);border:1px solid var(--ac)}
+.drop{border:2px dashed var(--bd);border-radius:12px;padding:22px;text-align:center;color:var(--mu);cursor:pointer;margin-top:4px}
+.drop.on{border-color:var(--ac);background:var(--bg)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font-size:12.5px;padding:3px 9px;border-radius:99px;border:1px solid var(--bd);background:var(--bg)}
+.chip.ok{background:var(--okb);color:var(--ok);border-color:transparent}
+.chip.no{background:var(--nob);color:var(--no);border-color:transparent}
+.chip button{all:unset;cursor:pointer;margin-left:6px;opacity:.6}
+.bar{height:8px;background:var(--bd);border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;background:var(--ac)}
+.cand{margin-top:14px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.name{font-weight:700;overflow-wrap:anywhere}
+.badge{padding:4px 12px;border-radius:99px;font-weight:700;font-size:13px}
+.b-m{background:var(--okb);color:var(--ok)}.b-p{background:var(--wnb);color:var(--wn)}.b-n{background:var(--nob);color:var(--no)}
+.big{font-size:28px;font-weight:800}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+@media(max-width:600px){.metrics{grid-template-columns:1fr}}
+.metrics span{font-size:12.5px;color:var(--mu);display:flex;justify-content:space-between;margin-bottom:4px}
+.note{color:var(--mu);font-size:13px}
+.bar-t{display:flex;justify-content:space-between;align-items:center;margin-top:20px;flex-wrap:wrap;gap:8px}
+.hide{display:none}.vh{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}.drop{display:block}
+:root{--bg:#f3f1ff;--card:#fff;--tx:#1f1d3a;--mu:#6b6890;--bd:#e4e0f7;--ac:#6c5ce7;--ok:#0b8f6a;--okb:#d3f9e8;--wn:#c2680a;--wnb:#ffecc7;--no:#d6336c;--nob:#ffe0ec;--chipbg:#ece8ff;--chiptx:#5b3fd1;--bgimg:linear-gradient(160deg,#eef2ff 0%,#fdf2f8 55%,#e6fcf5 100%)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14122a;--card:#1f1b3a;--tx:#f0edff;--mu:#a9a5cf;--bd:#332e5c;--ac:#9d8cff;--ok:#63e6be;--okb:#12362f;--wn:#ffc078;--wnb:#3d2d12;--no:#ff8fb3;--nob:#3f1830;--chipbg:#2e2760;--chiptx:#c4b8ff;--bgimg:linear-gradient(160deg,#14122a,#1c1238 55%,#0f2a2a)}}
+:root[data-theme="dark"]{--bg:#14122a;--card:#1f1b3a;--tx:#f0edff;--mu:#a9a5cf;--bd:#332e5c;--ac:#9d8cff;--ok:#63e6be;--okb:#12362f;--wn:#ffc078;--wnb:#3d2d12;--no:#ff8fb3;--nob:#3f1830;--chipbg:#2e2760;--chiptx:#c4b8ff;--bgimg:linear-gradient(160deg,#14122a,#1c1238 55%,#0f2a2a)}
+body{background:var(--bgimg);background-attachment:fixed;background-color:var(--bg)}
+.hero{background:linear-gradient(120deg,#6c5ce7,#a855f7 55%,#f06595);color:#fff;border-radius:18px;padding:24px 22px;margin-bottom:18px;box-shadow:0 10px 30px rgba(108,92,231,.3)}
+.hero h1{margin:0 0 6px;font-size:26px;color:#fff}.hero p{margin:0;opacity:.93}
+.card{border-radius:16px;box-shadow:0 4px 18px rgba(80,60,180,.09)}
+.grid .card:nth-child(1){border-top:4px solid #6c5ce7}.grid .card:nth-child(2){border-top:4px solid #f06595}.wrap>.card{border-top:4px solid #12b886}
+.card h2{color:var(--ac)}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--ac);border-color:transparent}
+button{background:linear-gradient(135deg,#6c5ce7,#a855f7);box-shadow:0 4px 12px rgba(108,92,231,.3)}
+button.sec{background:transparent;box-shadow:none;color:var(--ac);border:1px solid var(--ac)}
+button.sec:hover{background:var(--chipbg)}
+.chip button{background:none;box-shadow:none}
+#run{background:linear-gradient(135deg,#12b886,#4c6ef5);box-shadow:0 6px 18px rgba(18,184,134,.35)}#run:disabled{opacity:.45;box-shadow:none;cursor:not-allowed}
+#skills .chip{background:var(--chipbg);color:var(--chiptx);border-color:transparent}
+#flist .chip:not(.no){background:var(--okb);color:var(--ok);border-color:transparent}
+.drop{background:linear-gradient(135deg,rgba(108,92,231,.07),rgba(18,184,134,.07));border-color:#a99cf5}
+.big{background:linear-gradient(135deg,#6c5ce7,#f06595);-webkit-background-clip:text;background-clip:text;color:transparent}
+.metrics>div:nth-child(1) .bar>i{background:linear-gradient(90deg,#6c5ce7,#a855f7)}.metrics>div:nth-child(2) .bar>i{background:linear-gradient(90deg,#f59f00,#ff922b)}.metrics>div:nth-child(3) .bar>i{background:linear-gradient(90deg,#12b886,#38d9a9)}
+.bar{height:10px}
+.cand:has(.b-m){border-left:6px solid #12b886}.cand:has(.b-p){border-left:6px solid #f59f00}.cand:has(.b-n){border-left:6px solid #f06595}
+.badge{box-shadow:0 2px 8px rgba(0,0,0,.08)}
+#rh{color:var(--ac)}
+</style></head><body><div class="wrap">
+<div class="hero"><h1>📄 CV Screening Tool</h1><p>Add the job requirements, upload CVs, then press Run to see who matches. Everything runs in your browser, so CVs are never uploaded anywhere.</p></div><style>.wrap>.sub{display:none}</style>
+<p class="sub">Add the job requirements, upload CVs and see who matches. Everything runs in your browser — CVs are never uploaded anywhere.</p>
+
+<div class="grid">
+<div class="card">
+<h2>1. Job requirements</h2>
+<label>Job title</label><input id="title" placeholder="e.g. Business Analyst">
+<label>Job ad / JD <small>(optional — paste it and key skills are picked up automatically)</small></label>
+<textarea id="jd" placeholder="Paste the job advertisement or job description here…"></textarea>
+<button class="sec" id="ext" style="margin-top:8px">Extract skills from JD</button>
+<label>Key skills expected <small>(type a skill and press Enter or comma)</small></label>
+<input id="skin" placeholder="e.g. SQL, Power BI, requirement gathering">
+<div class="chips" id="skills"></div>
+</div>
+<div class="card">
+<h2>2. Education, experience &amp; pass mark</h2>
+<label>Minimum education</label>
+<select id="edu"><option value="0">Not required</option><option value="1">O/L or A/L</option><option value="2">Diploma / HND</option><option value="3">Professional qualification (e.g. CIPM, ACCA, CIMA)</option><option value="4" selected>Bachelor’s degree</option><option value="5">Master’s degree</option><option value="6">PhD</option></select>
+<div class="row"><div><label>Min. years of experience</label><input id="exp" type="number" min="0" value="2"></div>
+<div><label>Match threshold (%)</label><input id="thr" type="number" min="1" max="100" value="60"></div></div>
+<label>Education keywords <small>(optional, e.g. IT, Information Systems, Business)</small></label>
+<input id="edukw" placeholder="Field of study keywords">
+<p class="note" style="margin-top:14px">Score = <b>60%</b> key skills + <b>20%</b> experience + <b>20%</b> education. “Match” is at or above the threshold, “Partial” is within 20 points below it, otherwise “Not match”.</p>
+</div></div>
+
+<div class="card" style="margin-top:16px">
+<h2>3. Upload CVs</h2>
+<label class="drop" id="drop" for="file">Drag &amp; drop CVs here or tap to browse<br><small>PDF, DOCX or TXT — multiple files allowed</small><br><span style="display:inline-block;margin-top:10px;background:var(--ac);color:#fff;padding:9px 16px;border-radius:8px;font-weight:600">Choose CV files</span></label>
+<input type="file" id="file" multiple class="vh">
+<p class="note" id="status"></p>
+<div class="chips" id="flist"></div>
+<div style="margin-top:14px"><button id="run" disabled style="font-size:16px;padding:12px 26px">▶ Run screening</button></div>
+</div>
+
+<div class="bar-t"><h2 style="margin:0;font-size:18px" id="rh"></h2><div><button class="sec" id="csv" hidden>Export CSV</button> <button class="sec" id="clr" hidden>Clear all</button></div></div>
+<div id="out"></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let skills=[],results=[];
+if(window.pdfjsLib)pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+const DICT=["sql","python","java","javascript","typescript","react","angular","node.js",".net","c#","php","power bi","tableau","excel","azure","aws","docker","kubernetes","git","agile","scrum","jira","rest api","api","testing","qa","selenium","devops","linux","networking","cybersecurity","erp","sap","crm","salesforce","ui/ux","figma","business analysis","requirement gathering","brd","process mapping","stakeholder management","project management","data analysis","communication","leadership","problem solving","teamwork","recruitment","payroll","hris","compliance","epf/etf","labour law","employee relations","performance management","grievance handling","training and development","onboarding","hr analytics","talent acquisition","employee engagement","payroll management","microsoft office","hr operations","iso 27001","iso 9001","documentation","reporting","excel macros","machine learning","html","css","wordpress","mysql","postgresql","mongodb","oracle","manufacturing","accounting","auditing","customer service"];
+const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+const has=(t,k)=>new RegExp("(^|[^a-z0-9])"+esc(k.toLowerCase())+"(?![a-z0-9])").test(t);
+function renderSkills(){$("skills").innerHTML=skills.map((s,i)=>`<span class="chip">${s}<button data-i="${i}" aria-label="remove">✕</button></span>`).join("")||'<span class="note">No skills added yet.</span>'}
+function addSkills(str){str.split(/[,\n]/).map(s=>s.trim()).filter(Boolean).forEach(s=>{if(!skills.some(x=>x.toLowerCase()==s.toLowerCase()))skills.push(s)});renderSkills()}
+$("skin").addEventListener("keydown",e=>{if(e.key=="Enter"||e.key==","){e.preventDefault();addSkills($("skin").value);$("skin").value=""}});
+$("skin").addEventListener("blur",()=>{addSkills($("skin").value);$("skin").value=""});
+$("skills").addEventListener("click",e=>{const i=e.target.dataset.i;if(i!==undefined){skills.splice(+i,1);renderSkills()}});
+$("ext").onclick=()=>{const t=$("jd").value.toLowerCase();if(!t.trim()){alert("Paste a job ad or JD first.");return}
+const f=DICT.filter(k=>has(t,k));if(!f.length)alert("No known skills were detected. Please add the key skills manually.");addSkills(f.join(","));
+const m=t.match(/(\d+)\+?\s*(?:years|yrs)/);if(m)$("exp").value=m[1];
+const e=t.includes("phd")?6:/master|msc|mba/.test(t)?5:/bachelor|degree|bsc/.test(t)?4:/chartered|professional qualification|cipm|acca|cima/.test(t)?3:/diploma|hnd/.test(t)?2:null;if(e!==null)$("edu").value=e}
+renderSkills();
+window.addEventListener("load",()=>{const m=[];if(!window.pdfjsLib)m.push("PDF reader");if(!window.mammoth)m.push("DOCX reader");if(m.length)$("status").textContent="⚠ Could not load the "+m.join(" and ")+". Check your internet connection or ad-blocker, then refresh. TXT files still work."});
+
+async function readFile(f){const n=f.name.toLowerCase();
+if(n.endsWith(".pdf")){const d=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise;let t="";for(let i=1;i<=d.numPages;i++){const p=await d.getPage(i);t+=(await p.getTextContent()).items.map(x=>x.str).join(" ")+"\n"}return t}
+if(n.endsWith(".docx"))return (await mammoth.extractRawText({arrayBuffer:await f.arrayBuffer()})).value;
+return await f.text()}
+const LV=[[6,/ph\.?d|doctorate/],[5,/master|msc|m\.sc|mba|postgraduate/],[4,/bachelor|b\.sc|bsc|b\.eng|b\.tech|\bbba\b|undergraduate|\bdegree\b|\bbit\b|\bbcs\b/],[3,/chartered|professional qualification|\bcipm\b|\bacca\b|\bcima\b/],[2,/diploma|\bhnd\b|\bhndit\b|advanced certificate/],[1,/a\/l|a-level|advanced level|o\/l|o-level|ordinary level|high school/]];
+const LN=["Not found","O/L–A/L","Diploma / HND","Professional qualification","Bachelor’s","Master’s","PhD"];
+function years(t){let best=0;for(const m of t.matchAll(/(\d{1,2})\+?\s*(?:years?|yrs?)(?:\s+of)?\s+(?:\w+\s+){0,3}?experience/g))best=Math.max(best,+m[1]);
+let sum=0;for(const m of t.matchAll(/((?:19|20)\d{2})\s*(?:[-–—]|to)\s*(?:[a-z]{3,9}\.?\s+)?((?:19|20)\d{2}|present|current|now)/g)){const a=+m[1],b=/^\d/.test(m[2])?+m[2]:new Date().getFullYear();if(b>=a&&b-a<=40)sum+=b-a}
+return Math.max(best,Math.min(sum,40))}
+function score(fname,raw){const nm=raw.match(/^\s*([A-Z][A-Z.'-]+(?: [A-Z][A-Z.'-]+){1,2})(?=\s)/);const name=nm?nm[1]+" ("+fname+")":fname;const lc0=raw.toLowerCase();let ri=-1;for(const m of lc0.matchAll(/r ?e ?f ?e ?r ?e ?n ?c ?e ?s/g))ri=m.index;const body=ri>lc0.length*.6?raw.slice(0,ri):raw;const t=body.toLowerCase().replace(/\s+/g," ");
+const need=skills,found=need.filter(s=>has(t,s)),miss=need.filter(s=>!has(t,s));
+const sp=need.length?found.length/need.length:1;
+const rq=+$("exp").value||0,yr=years(t),ep=rq?Math.min(1,yr/rq):1;
+const eq=+$("edu").value;let lv=0;for(const[l,r]of LV)if(r.test(t)){lv=l;break}
+let dp=eq?Math.min(1,lv/eq):1;
+const kw=$("edukw").value.split(",").map(s=>s.trim()).filter(Boolean);let kwm=null;
+if(kw.length){kwm=kw.filter(k=>has(t,k)).length>0;if(!kwm)dp*=.5}
+const total=Math.round((sp*60+ep*20+dp*20));
+const thr=+$("thr").value||60;
+const v=total>=thr?"Match":total>=thr-20?"Partial":"Not match";
+return{name,total,v,sp:Math.round(sp*100),ep:Math.round(ep*100),dp:Math.round(dp*100),found,miss,yr,lv,kwm,words:t.split(" ").length}}
+let queue=[];
+function qdraw(){$("flist").innerHTML=queue.map((q,i)=>`<span class="chip${q.err?" no":""}">${q.fname}<button data-q="${i}" aria-label="remove">✕</button></span>`).join("");$("run").disabled=!queue.length}
+$("flist").addEventListener("click",e=>{const i=e.target.dataset.q;if(i!==undefined){queue.splice(+i,1);qdraw()}});
+function runAll(){if(!queue.length)return;if(!skills.length&&!confirm("No key skills added. Only experience and education will be scored. Continue?"))return;results=queue.map(q=>q.err?{name:q.fname,err:q.err}:score(q.fname,q.text));$("status").textContent=queue.length+" CV(s) screened. Change any requirement and press Run again to re-score.";draw();$("rh").scrollIntoView({behavior:"smooth"})}
+$("run").onclick=runAll;
+async function handle(files){
+for(const f of files){$("status").textContent="Reading "+f.name+"…";
+try{const t=await readFile(f);if(t.trim().length<40)queue.push({fname:f.name,err:"No readable text found (scanned image PDF?). Try a text-based PDF or DOCX."});else queue.push({fname:f.name,text:t})}
+catch(e){queue.push({fname:f.name,err:"Could not read this file."})}}
+$("status").textContent=queue.length+" CV(s) ready. Press Run screening.";qdraw()}
+function draw(){results.sort((a,b)=>(b.total??-1)-(a.total??-1));
+const ok=results.filter(r=>!r.err);
+$("rh").textContent=results.length?`Results — ${ok.filter(r=>r.v=="Match").length} match, ${ok.filter(r=>r.v=="Partial").length} partial, ${ok.filter(r=>r.v=="Not match").length} not match`:"";
+$("csv").hidden=$("clr").hidden=!results.length;
+$("out").innerHTML=results.map(r=>{if(r.err)return`<div class="card cand"><div class="name">${r.name}</div><p class="note">⚠ ${r.err}</p></div>`;
+const cls=r.v=="Match"?"b-m":r.v=="Partial"?"b-p":"b-n";
+const m=(l,p,x)=>`<div><span><b>${l}</b><b>${p}%</b></span><div class="bar"><i style="width:${p}%"></i></div><span style="margin-top:4px">${x}</span></div>`;
+return`<div class="card cand"><div class="top"><div><div class="name">${r.name}</div><div class="note">${$("title").value||"Role"}</div></div><div style="display:flex;gap:12px;align-items:center"><span class="big">${r.total}%</span><span class="badge ${cls}">${r.v}</span></div></div>
+<div class="metrics">${m("Key skills",r.sp,r.found.length+" of "+skills.length+" found")}${m("Experience",r.ep,r.yr+" yrs found / "+($("exp").value||0)+" needed")}${m("Education",r.dp,LN[r.lv]+(r.kwm===null?"":r.kwm?" · field ✓":" · field not found"))}</div>
+${r.found.length?`<div class="note">Found</div><div class="chips">${r.found.map(s=>`<span class="chip ok">${s}</span>`).join("")}</div>`:""}
+${r.miss.length?`<div class="note" style="margin-top:8px">Missing</div><div class="chips">${r.miss.map(s=>`<span class="chip no">${s}</span>`).join("")}</div>`:""}</div>`}).join("")}
+$("file").onchange=e=>{handle([...e.target.files]);e.target.value=""};
+["dragover","dragenter"].forEach(v=>$("drop").addEventListener(v,e=>{e.preventDefault();$("drop").classList.add("on")}));
+["dragleave","drop"].forEach(v=>$("drop").addEventListener(v,e=>{e.preventDefault();$("drop").classList.remove("on")}));
+$("drop").addEventListener("drop",e=>handle([...e.dataTransfer.files]));
+$("clr").onclick=()=>{results=[];queue=[];qdraw();draw();$("status").textContent=""};
+$("csv").onclick=()=>{const q=s=>'"'+String(s).replace(/"/g,'""')+'"';
+const rows=[["File","Overall %","Verdict","Skills %","Experience %","Education %","Years found","Skills found","Skills missing"]];
+results.filter(r=>!r.err).forEach(r=>rows.push([r.name,r.total,r.v,r.sp,r.ep,r.dp,r.yr,r.found.join("; "),r.miss.join("; ")]));
+const a=document.createElement("a");a.href="data:text/csv;charset=utf-8,"+encodeURIComponent(rows.map(r=>r.map(q).join(",")).join("\n"));a.download="cv-screening.csv";a.click()};
+</script></body></html>
